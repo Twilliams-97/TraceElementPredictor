@@ -66,24 +66,19 @@ function forwardloglogplotter(i,combinedfullelements,B,STATS,ElementNames)
         else
             subplot(2,4,(i-8))
         end
-
+             
         loglog(combinedfullelements(i,:),combinedfullelements((i+1),:),'.','DisplayName','Measured Elements')
         hold on
+        fittedregression = refline(B(2),B(1));
+        hold off
 
         xlabel(ElementNames(i))
         ylabel(ElementNames(i+1))
-        
-        fittedregression = refline(B(2),B(1));
-        
         fittedregression.DisplayName = strcat('y =',num2str(B(2)),'x +',num2str(B(1)), '. R^2 = ', num2str(STATS(1)));
-          
         legend('Location','NorthWest','color','none')
         set(gcf,'position',[300,300,1300,600])
-      
-        hold off
 
 end
-
 
 function backwardloglogplotter(i,combinedfullelements,B,STATS,ElementNames)
        
@@ -95,14 +90,13 @@ function backwardloglogplotter(i,combinedfullelements,B,STATS,ElementNames)
         
         loglog(combinedfullelements(i+1,:),combinedfullelements((i),:),'.','DisplayName','Measured Elements')
         hold on
+        fittedregression = refline(B(2),B(1)); 
+        hold off
+              
         xlabel(ElementNames(i+1))
         ylabel(ElementNames(i))
-
-        fittedregression = refline(B(2),B(1));      
         fittedregression.DisplayName = strcat('y =',num2str(B(2)),'x +',num2str(B(1)), '. R^2 = ', num2str(STATS(1)));
-            
         legend('Location','NorthWest','color','none')
         set(gcf,'position',[300,300,1300,600])
-        hold off
-        
+             
 end
