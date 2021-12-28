@@ -5,17 +5,17 @@ sparseelementiterator = SparseElements; %Create an array that will be filled wit
 for repeat = 1:(NearestNeighbours)
  
     sparseelementiterator(sparseelementiterator==0)=9999;
-    [blankrow,blankcolumn] = find(sparseelementiterator == 9999);
+    [missingrow,missingcolumn] = find(sparseelementiterator == 9999);
     
 %% Find fits from the element before the missing element:
 
     forwardelements = zeros(size(sparseelementiterator));   %We'll save these into a matrix the same size as the 'missing' matrix 
 
-    for index = 1:length(blankrow)
+    for index = 1:length(missingrow)
 
-        if blankrow(index) ~=1 && sparseelementiterator(blankrow(index)-1,blankcolumn(index)) ~= 9999 
+        if missingrow(index) ~=1 && sparseelementiterator(missingrow(index)-1,missingcolumn(index)) ~= 9999 
 
-            forwardelements(blankrow(index),blankcolumn(index)) = sparseelementiterator(blankrow(index)-1,blankcolumn(index))*forwardregressor(blankrow(index)-1,1) + forwardregressor(blankrow(index)-1,2);
+            forwardelements(missingrow(index),missingcolumn(index)) = sparseelementiterator(missingrow(index)-1,missingcolumn(index))*forwardregressor(missingrow(index)-1,1) + forwardregressor(missingrow(index)-1,2);
 
         end
 
@@ -26,11 +26,11 @@ for repeat = 1:(NearestNeighbours)
         backwardelements = zeros(size(sparseelementiterator));
         lastrownumber = length(sparseelementiterator(:,1));
 
-        for index = 1:length(blankrow)
+        for index = 1:length(missingrow)
 
-            if blankrow(index) ~=lastrownumber && sparseelementiterator(blankrow(index)+1,blankcolumn(index)) ~= 9999    
+            if missingrow(index) ~=lastrownumber && sparseelementiterator(missingrow(index)+1,missingcolumn(index)) ~= 9999    
 
-                backwardelements(blankrow(index),blankcolumn(index)) = sparseelementiterator(blankrow(index)+1,blankcolumn(index))*backwardregressor(blankrow(index),1) + backwardregressor(blankrow(index),2);
+                backwardelements(missingrow(index),missingcolumn(index)) = sparseelementiterator(missingrow(index)+1,missingcolumn(index))*backwardregressor(missingrow(index),1) + backwardregressor(missingrow(index),2);
 
             end
         end
@@ -45,16 +45,14 @@ for repeat = 1:(NearestNeighbours)
         %We have 1s in positions in the matrix where one prediction has been made, 2 where 2, and 0 where none.
         %Use to take average where there is more than one prediction (i.e. value for both forwards and backwards)
 
-        averager = (forwardelements ~= 0) + (backwardelements ~= 0);
+        divider = (forwardelements ~= 0) + (backwardelements ~= 0);
         
-        combine = (forwardelements+backwardelements)./averager; %divide by number of predictions (max two)
-        combine(isnan(combine)) = 0;    %replaces NaN values with 0
+        combinedpredictions = (forwardelements+backwardelements)./divider; %divide by number of predictions (max two)
+        combinedpredictions(isnan(combinedpredictions)) = 0;    %replaces NaN values with 0
 
-        sparseelementiterator(sparseelementiterator==9999)=0;
-        
         %Insert our predicted elements into where they are missing
-        
-        sparseelementiterator = sparseelementiterator + combine; 
+        sparseelementiterator(sparseelementiterator==9999)=0;
+        sparseelementiterator = sparseelementiterator + combinedpredictions; 
 
 end
 
