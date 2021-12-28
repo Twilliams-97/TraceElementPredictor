@@ -10,42 +10,51 @@ sparseelementiterator = SparseElements;
 for repeat = 1:(NearestNeighbours)
  
 sparseelementiterator(sparseelementiterator==0)=9999;
-%sparseelementiterator(isnan(sparseelementiterator)) = 9999;    %NewTest
-    
-forwardelements = zeros(rowsparse,columnsparse);  %Save these into a matrix the same size as the 'missing' matrix 
+%sparseelementiterator(isnan(sparseelementiterator)) = 9999;    %NewTest\
+
+[blankrow,blankcolumn] = find(sparseelementiterator == 9999);
 
 %% Predict the missing elements. Do this in a for loop.
 
+forwardelements = zeros(rowsparse,columnsparse);  %Save these into a matrix the same size as the 'missing' matrix 
 
-    for row = 1:(rowsparse-1)  %Goes to i=1,i=2,...i=n-1. Will iterate for every pair of elements in the sparse matrix.
+row = blankrow;
+column = blankcolumn;
 
-        for column = 1:columnsparse %j=1,j=2,...j=n. Will iterate for every individual sample in the sparse matrix.
+firstrow = find(row == 1);
+row(firstrow) = [];  column(firstrow) = []; 
 
-            if sparseelementiterator(row+1,column) == 9999 && sparseelementiterator(row,column) ~= 9999 %Use this to fill values
-                
-                    forwardelements(row+1,column) = sparseelementiterator(row,column)*forwardregressor(row,1) + forwardregressor(row,2);
-                    
-            end
-
-        end
+for index = 1:length(row)
+    
+    if sparseelementiterator(row(index)-1,column(index)) ~= 9999 
+    
+        forwardelements(row(index),column(index)) = sparseelementiterator(row(index)-1,column(index))*forwardregressor(row(index)-1,1) + forwardregressor(row(index)-1,2);
+        
     end
+    
+end
 
-    %% Find fits from the element after the missing element   
-
+%% Find fits from the element after the missing element 
+    
     backwardelements = zeros(rowsparse,columnsparse);
-
-    for row = 1:(rowsparse-1) %Goes to i=1,i=2,...i=n-1. Will iterate for every pair of elements in the sparse matrix.
-
-        for column = 1:columnsparse %Goes to j=1,j=2,...j=n. Will iterate for every individual sample in the sparse matrix.
-
-            if sparseelementiterator(row,column) == 9999 && sparseelementiterator(row+1,column) ~= 9999 %Use this to fill values
-                
-                    backwardelements(row,column) = sparseelementiterator(row+1,column)*backwardregressor(row,1) + backwardregressor(row,2);
-
-            end
-
+    
+    %remove any in the last row
+    
+    row = blankrow;
+    column = blankcolumn;
+    
+    lastrow = find(blankrow == rowsparse);
+    row(lastrow) = [];  column(lastrow) = []; 
+     
+    for index = 1:length(row)
+        
+        if sparseelementiterator(row(index)+1,column(index)) ~= 9999    
+                     
+            backwardelements(row(index),column(index)) = sparseelementiterator(row(index)+1,column(index))*backwardregressor(row(index),1) + backwardregressor(row(index),2);
+        
         end
     end
+
     
     %% Remove elements where visually the fit was found to be poor
     % Needs to happen inside the for loop
