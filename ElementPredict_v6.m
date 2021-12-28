@@ -1,4 +1,4 @@
-%% Term Paper
+%% Element Predictor
 
 clear;
 close all;
@@ -40,24 +40,8 @@ SparseElements = MareBasaltElements; %[MareBasaltElements VolcanicGlassElements]
 
 %% Select Elements to Include
 
-Include_La = 1;
-Include_Ce = 1;
-Include_Pr = 1;
-Include_Sr = 0;
-Include_Nd = 1;
-Include_Zr = 1;
-Include_Hf = 1;
-Include_Sm = 1;
-Include_Eu = 1;
-Include_Gd = 1;
-Include_Tb = 1;
-Include_Dy = 1;
-Include_Y  = 1;
-Include_Ho = 1;
-Include_Er = 1;
-Include_Tm = 1;
-Include_Yb = 1;
-Include_Lu = 1;
+IncludedElements = [1 ;1 ;1 ;0 ;1 ;1 ;1 ;1 ;1 ;1 ;1 ;1 ;1 ;1 ;1 ;1 ;1 ;1];
+                  %[La;Ce;Pr;Sr;Nd;Zr;Hf;Sm;Eu;Gd;Tb;Dy;Y ;Ho;Er;Tm;Yb;Lu]
 
 ElementChooser
 
@@ -95,7 +79,6 @@ if AddEuAnomalytoArray
 
 end
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% Plot our Final Results
@@ -103,15 +86,15 @@ end
 %There are multiple options for what to include
 
 IsBasalt = 0;
-IncludeLowTiBasalt = 1;     %If using Basalt, do you want to plot LowTiBasalt?
+IncludeLowTiBasalt = 0;     %If using Basalt, do you want to plot LowTiBasalt?
 DisplayKREEPonLogLog = 1;
 DisplayAlkaliAnorthiteonLogLog = 1;
 DisplayAlkaliNoriteonLogLog = 1;
 
 Normalise = 1;
-DisplayLogLog = 1;
+DisplayLogLog = 0;
 DisplayFinalResults = 0;
-plotcombined = 0;
+plotcombined = 1;
 
 FinalResultPlotter
 %FinalPredictorPlotter
@@ -126,7 +109,3 @@ if AddEuAnomalytoArray
     writetable(FilledDatawithEuAnomaly,filename,'Sheet','FilledData','Range','A1','WriteVariableNames',false)
     
 end
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
