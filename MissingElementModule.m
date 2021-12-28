@@ -42,22 +42,20 @@ for repeat = 1:(NearestNeighbours)
         
 %% Insert our predicted elements into the sparse array to create an array with both measuered and predicted values
 
-        sparseelementiterator(sparseelementiterator==9999)=0;
-
         %Take average of of there is more than one prediction (i.e. value for both forwards and backwards)
+        
+        forwardnotzero = forwardelements ~= 0;  %Gives 1s in positions in the matrix where predictions have been made
+        backwardnotzero = backwardelements ~= 0;
+        averager = forwardnotzero + backwardnotzero;   %0 if no predictions, 1 if one, 2 if two. Dividing by this gives an average.
 
-        forwardnormaliser = forwardelements./forwardelements;
-        backwardnormaliser = backwardelements./backwardelements;
+        combine = (forwardelements+backwardelements)./averager; %divide by number of predictions (max two)
+        combine(isnan(combine)) = 0;    %replaces NaN values with 0
 
-        forwardnormaliser(isnan(forwardnormaliser)) = 0;
-        backwardnormaliser(isnan(backwardnormaliser)) = 0;
-
-        predictedelementaverager = 1./(forwardnormaliser + backwardnormaliser);     %divide by number of predictions (max two)
-        predictedelementaverager(isinf(predictedelementaverager)) = 0;              %replaces inf values with 0
-
-         %Inserts our predicted elements into where they are missing
-
-        sparseelementiterator = sparseelementiterator + (forwardelements + backwardelements).*predictedelementaverager; 
+        sparseelementiterator(sparseelementiterator==9999)=0;
+        
+        %Insert our predicted elements into where they are missing
+        
+        sparseelementiterator = sparseelementiterator + combine; 
 
 end
 
