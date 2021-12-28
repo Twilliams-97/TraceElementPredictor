@@ -10,7 +10,7 @@ sparseelementiterator = SparseElements;
 for repeat = 1:(NearestNeighbours)
  
 sparseelementiterator(sparseelementiterator==0)=9999;
-%sparseelementiterator(isnan(sparseelementiterator)) = 9999;    %NewTest\
+%sparseelementiterator(isnan(sparseelementiterator)) = 9999;    %NewTest
 
 [blankrow,blankcolumn] = find(sparseelementiterator == 9999);
 
@@ -18,17 +18,11 @@ sparseelementiterator(sparseelementiterator==0)=9999;
 
 forwardelements = zeros(rowsparse,columnsparse);  %Save these into a matrix the same size as the 'missing' matrix 
 
-row = blankrow;
-column = blankcolumn;
-
-firstrow = find(row == 1);
-row(firstrow) = [];  column(firstrow) = []; 
-
-for index = 1:length(row)
+for index = 1:length(blankrow)
     
-    if sparseelementiterator(row(index)-1,column(index)) ~= 9999 
+    if blankrow(index) ~=1 && sparseelementiterator(blankrow(index)-1,blankcolumn(index)) ~= 9999 
     
-        forwardelements(row(index),column(index)) = sparseelementiterator(row(index)-1,column(index))*forwardregressor(row(index)-1,1) + forwardregressor(row(index)-1,2);
+        forwardelements(blankrow(index),blankcolumn(index)) = sparseelementiterator(blankrow(index)-1,blankcolumn(index))*forwardregressor(blankrow(index)-1,1) + forwardregressor(blankrow(index)-1,2);
         
     end
     
@@ -39,23 +33,16 @@ end
     backwardelements = zeros(rowsparse,columnsparse);
     
     %remove any in the last row
-    
-    row = blankrow;
-    column = blankcolumn;
-    
-    lastrow = find(blankrow == rowsparse);
-    row(lastrow) = [];  column(lastrow) = []; 
      
-    for index = 1:length(row)
+    for index = 1:length(blankrow)
         
-        if sparseelementiterator(row(index)+1,column(index)) ~= 9999    
+        if blankrow(index) ~=17 && sparseelementiterator(blankrow(index)+1,blankcolumn(index)) ~= 9999    
                      
-            backwardelements(row(index),column(index)) = sparseelementiterator(row(index)+1,column(index))*backwardregressor(row(index),1) + backwardregressor(row(index),2);
+            backwardelements(blankrow(index),blankcolumn(index)) = sparseelementiterator(blankrow(index)+1,blankcolumn(index))*backwardregressor(blankrow(index),1) + backwardregressor(blankrow(index),2);
         
         end
     end
-
-    
+ 
     %% Remove elements where visually the fit was found to be poor
     % Needs to happen inside the for loop
     % Do this for the bad fits in forwardelements and backwards elements
