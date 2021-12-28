@@ -41,13 +41,12 @@ for repeat = 1:(NearestNeighbours)
         %SparseElements(8,:)=0;
         
 %% Insert our predicted elements into the sparse array to create an array with both measuered and predicted values
-
-        %Take average of of there is more than one prediction (i.e. value for both forwards and backwards)
         
-        forwardnotzero = forwardelements ~= 0;  %Gives 1s in positions in the matrix where predictions have been made
-        backwardnotzero = backwardelements ~= 0;
-        averager = forwardnotzero + backwardnotzero;   %0 if no predictions, 1 if one, 2 if two. Dividing by this gives an average.
+        %We have 1s in positions in the matrix where one prediction has been made, 2 where 2, and 0 where none.
+        %Use to take average where there is more than one prediction (i.e. value for both forwards and backwards)
 
+        averager = (forwardelements ~= 0) + (backwardelements ~= 0);
+        
         combine = (forwardelements+backwardelements)./averager; %divide by number of predictions (max two)
         combine(isnan(combine)) = 0;    %replaces NaN values with 0
 
