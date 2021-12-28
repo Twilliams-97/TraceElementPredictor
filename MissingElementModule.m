@@ -1,19 +1,15 @@
 %% Find the missing elements in the sparse matrix (the one with not all elements measured)    
     
-[rowsparse,columnsparse] = size(SparseElements);    %Find number or rows and columns to iterate over 
-                                                    %to fill the spare elements with predictions
-sparseelementiterator = SparseElements;
-
-%% Find fits from the element before the missing element 
+sparseelementiterator = SparseElements; %Create an array that will be filled with predicted values
 
 for repeat = 1:(NearestNeighbours)
  
     sparseelementiterator(sparseelementiterator==0)=9999;
     [blankrow,blankcolumn] = find(sparseelementiterator == 9999);
+    
+%% Find fits from the element before the missing element:
 
-    %% Predict the missing elements. Do this in a for loop.
-
-    forwardelements = zeros(rowsparse,columnsparse);  %Save these into a matrix the same size as the 'missing' matrix 
+    forwardelements = zeros(size(sparseelementiterator));   %We'll save these into a matrix the same size as the 'missing' matrix 
 
     for index = 1:length(blankrow)
 
@@ -25,30 +21,30 @@ for repeat = 1:(NearestNeighbours)
 
     end
 
-    %% Find fits from the element after the missing element 
+%% Find fits from the element after the missing element: 
 
-        backwardelements = zeros(rowsparse,columnsparse);
-
-        %remove any in the last row
+        backwardelements = zeros(size(sparseelementiterator));
+        lastrownumber = length(sparseelementiterator(:,1));
 
         for index = 1:length(blankrow)
 
-            if blankrow(index) ~=17 && sparseelementiterator(blankrow(index)+1,blankcolumn(index)) ~= 9999    
+            if blankrow(index) ~=lastrownumber && sparseelementiterator(blankrow(index)+1,blankcolumn(index)) ~= 9999    
 
                 backwardelements(blankrow(index),blankcolumn(index)) = sparseelementiterator(blankrow(index)+1,blankcolumn(index))*backwardregressor(blankrow(index),1) + backwardregressor(blankrow(index),2);
 
             end
         end
 
-        %% Remove elements where visually the fit was found to be poor
-        % Needs to happen inside the for loop. Do this for the bad for- and backwards fits
+%% Remove elements where visually the fit was found to be poor (in either forward or backward fitting)
 
         %GlassElements(7,:)=0; 
         %SparseElements(8,:)=0;
+        
+%% Insert our predicted elements into the sparse array to create an array with both measuered and predicted values
 
         sparseelementiterator(sparseelementiterator==9999)=0;
 
-        %Need to get it so it only divides by two if both have a value!
+        %Take average of of there is more than one prediction (i.e. value for both forwards and backwards)
 
         forwardnormaliser = forwardelements./forwardelements;
         backwardnormaliser = backwardelements./backwardelements;
@@ -59,8 +55,7 @@ for repeat = 1:(NearestNeighbours)
         predictedelementaverager = 1./(forwardnormaliser + backwardnormaliser);     %divide by number of predictions (max two)
         predictedelementaverager(isinf(predictedelementaverager)) = 0;              %replaces inf values with 0
 
-         %Adds our forwards and backward predicted elements to where they are missing in the sparse matrix
-         %If two predictions are made, this will take the average
+         %Inserts our predicted elements into where they are missing
 
         sparseelementiterator = sparseelementiterator + (forwardelements + backwardelements).*predictedelementaverager; 
 
