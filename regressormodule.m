@@ -20,14 +20,9 @@ for i = 1:(rowsfullcombined-1)  %this iterates for every pair of elements in the
     forwardregressor(i,2) = B(1);
 
     if DisplayForwardFits %Will display if DisplayForwardFits = 1. 
-        
-        if i == 1 || i==9
-            figure()
-        end
-               
-        %forwardloglogplotter(i,combinedfullelements,B,STATS,ElementNames)     %This plots the log-log graphs & regression line
-        
-        loglogplotter(i,combinedfullelements,B,STATS,ElementNames,1)
+           
+        loglogplotter(i,combinedfullelements,B,STATS,ElementNames,1)    %Plots the log-log graphs & regression line
+    
     end                                                   
 
 end
@@ -46,12 +41,8 @@ for i = 1:(rowsfullcombined-1)  %this iterates for every pair of elements in the
     backwardregressor(i,2) = B(1);
 
     if DisplayBackwardFits%Will display if DisplayBackwardFits = 1.
-        
-        if i == 1 || i==9
-            figure()
-        end
-        
-        loglogplotter(i,combinedfullelements,B,STATS,ElementNames,0)   %This plots the log-log graphs and regression line
+
+        loglogplotter(i,combinedfullelements,B,STATS,ElementNames,0)   %Plots the log-log graphs and regression line
   
     end
         
@@ -62,27 +53,28 @@ combinedfullelements(isnan(combinedfullelements)) = 9999;
 %% Functions
 
 function loglogplotter(i,combinedfullelements,B,STATS,ElementNames,direction) %1 for forwards, 0 for backwards
-       
+
+        if i == 1 || i==9
+            figure()
+        end
+
         if i <= 8
             subplot(2,4,i)
         else
             subplot(2,4,(i-8))
         end
         
-        if direction
-            loglog(combinedfullelements(i,:),combinedfullelements((i+1),:),'.','DisplayName','Measured Elements')
-            xlabel(ElementNames(i))
-            ylabel(ElementNames(i+1))
-        else 
-            loglog(combinedfullelements(i+1,:),combinedfullelements((i),:),'.','DisplayName','Measured Elements')
-            xlabel(ElementNames(i+1))
-            ylabel(ElementNames(i))
-        end
-         
+        ydir = direction;           %These are used to get the appropriate plots and labels
+        xdir = not(direction);      %The +1 and +0 need to be opposite for forward and backward
+        
+        loglog(combinedfullelements(i+xdir,:),combinedfullelements((i+ydir),:),'.','DisplayName','Measured Elements')
+
         hold on
         fittedregression = refline(B(2),B(1)); 
         hold off
               
+        xlabel(ElementNames(i+xdir))
+        ylabel(ElementNames(i+ydir))
         fittedregression.DisplayName = strcat('y =',num2str(B(2)),'x +',num2str(B(1)), '. R^2 = ', num2str(STATS(1)));
         legend('Location','NorthWest','color','none')
         set(gcf,'position',[300,300,1300,600])
