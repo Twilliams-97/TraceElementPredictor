@@ -1,8 +1,8 @@
 %% Removes elements that aren't wanted
 
-for elementnumber = 1:length(IncludedElements)
+for elementnumber = length(IncludedElements):-1:1
      
-    if IncludedElements(elementnumber) == 0
+    if ~IncludedElements(elementnumber)
         
         [combinedfullelements,SparseElements,ElementNames,NormaliseElements] = elementchoice(elementnumber,combinedfullelements,SparseElements,ElementNames,NormaliseElements);
 
