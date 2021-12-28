@@ -1,11 +1,11 @@
 %% Find the missing elements in the sparse matrix (the one with not all elements measured)    
     
 sparseelementiterator = SparseElements; %Create an array that will be filled with predicted values
+sparseelementiterator(sparseelementiterator==9999)=0;
 
 for repeat = 1:(NearestNeighbours)
- 
-    sparseelementiterator(sparseelementiterator==0)=9999;
-    [missingrow,missingcolumn] = find(sparseelementiterator == 9999);
+     
+    [missingrow,missingcolumn] = find(sparseelementiterator == 0);
     
 %% Find fits from the element before the missing element:
 
@@ -13,7 +13,7 @@ for repeat = 1:(NearestNeighbours)
 
     for index = 1:length(missingrow)
 
-        if missingrow(index) ~=1 && sparseelementiterator(missingrow(index)-1,missingcolumn(index)) ~= 9999 
+        if missingrow(index) ~=1 && sparseelementiterator(missingrow(index)-1,missingcolumn(index)) ~= 0 
 
             forwardelements(missingrow(index),missingcolumn(index)) = sparseelementiterator(missingrow(index)-1,missingcolumn(index))*forwardregressor(missingrow(index)-1,1) + forwardregressor(missingrow(index)-1,2);
 
@@ -28,7 +28,7 @@ for repeat = 1:(NearestNeighbours)
 
         for index = 1:length(missingrow)
 
-            if missingrow(index) ~=lastrownumber && sparseelementiterator(missingrow(index)+1,missingcolumn(index)) ~= 9999    
+            if missingrow(index) ~=lastrownumber && sparseelementiterator(missingrow(index)+1,missingcolumn(index)) ~= 0    
 
                 backwardelements(missingrow(index),missingcolumn(index)) = sparseelementiterator(missingrow(index)+1,missingcolumn(index))*backwardregressor(missingrow(index),1) + backwardregressor(missingrow(index),2);
 
@@ -46,14 +46,10 @@ for repeat = 1:(NearestNeighbours)
         %Use to take average where there is more than one prediction (i.e. value for both forwards and backwards)
 
         divider = (forwardelements ~= 0) + (backwardelements ~= 0);
-        
         combinedpredictions = (forwardelements+backwardelements)./divider; %divide by number of predictions (max two)
         combinedpredictions(isnan(combinedpredictions)) = 0;    %replaces NaN values with 0
 
         %Insert our predicted elements into where they are missing
-        sparseelementiterator(sparseelementiterator==9999)=0;
-        sparseelementiterator = sparseelementiterator + combinedpredictions; 
+        sparseelementiterator = sparseelementiterator + combinedpredictions;
 
 end
-
-sparseelementiterator(sparseelementiterator==9999)=NaN;
