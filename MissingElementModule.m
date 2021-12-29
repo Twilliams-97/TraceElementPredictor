@@ -15,7 +15,7 @@ for repeat = 1:(NearestNeighbours)
 
         if missingrow(index) ~=1 && sparseelementiterator(missingrow(index)-1,missingcolumn(index)) ~= 0 
 
-            forwardelements(missingrow(index),missingcolumn(index)) = sparseelementiterator(missingrow(index)-1,missingcolumn(index))*forwardregressor(missingrow(index)-1,1) + forwardregressor(missingrow(index)-1,2);
+            forwardelements(missingrow(index),missingcolumn(index)) = sparseelementiterator(missingrow(index)-1,missingcolumn(index))*forwardregressor(missingrow(index)-1,2) + forwardregressor(missingrow(index)-1,1);
 
         end
 
@@ -30,16 +30,15 @@ for repeat = 1:(NearestNeighbours)
 
             if missingrow(index) ~=lastrownumber && sparseelementiterator(missingrow(index)+1,missingcolumn(index)) ~= 0    
 
-                backwardelements(missingrow(index),missingcolumn(index)) = sparseelementiterator(missingrow(index)+1,missingcolumn(index))*backwardregressor(missingrow(index),1) + backwardregressor(missingrow(index),2);
+                backwardelements(missingrow(index),missingcolumn(index)) = sparseelementiterator(missingrow(index)+1,missingcolumn(index))*backwardregressor(missingrow(index),2) + backwardregressor(missingrow(index),1);
 
             end
         end
 
 %% Remove elements where visually the fit was found to be poor (in either forward or backward fitting)
 
-        %GlassElements(7,:)=0; 
-        %SparseElements(8,:)=0;
-        
+        %e.g. GlassElements(7,:)=0; SparseElements(8,:)=0;
+
 %% Insert our predicted elements into the sparse array to create an array with both measuered and predicted values
         
         %We have 1s in positions in the matrix where one prediction has been made, 2 where 2, and 0 where none.
