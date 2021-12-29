@@ -2,10 +2,6 @@
 
 [rowsfullcombined,columnsfullcombined] = size(combinedfullelements);
 
-%% Set 9999 to NaN here. Change back at end.
-
-combinedfullelements(combinedfullelements==9999)=NaN;
-
 %% Forward Regress. Finds a fit based on known the element before the missing element
 
 forwardregressor = zeros((rowsfullcombined-1) ,2);  %Creates an array to store the fit lines for every pair of elements next to one another
@@ -47,8 +43,6 @@ for i = 1:(rowsfullcombined-1)  %this iterates for every pair of elements in the
     end
         
 end
-
-combinedfullelements(isnan(combinedfullelements)) = 9999;
 
 %% Functions
 
