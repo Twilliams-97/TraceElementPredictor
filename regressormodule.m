@@ -1,5 +1,4 @@
 %% Find regressions moving forwards and backwards
-
 [rowsfullcombined,columnsfullcombined] = size(combinedfullelements);
 
 %% Forward Regress. Finds a fit based on known the element before the missing element
@@ -10,10 +9,9 @@ for i = 1:(rowsfullcombined-1)  %this iterates for every pair of elements in the
 
     x = reshape(combinedfullelements((i),:),[],1);
     Y = reshape(combinedfullelements((i+1),:),[],1);  
-    [B,BINT,R,RINT,STATS] = regress(Y,[ones(size(x(:))),x(:)]);
+    [B,~,~,~,STATS] = regress(Y,[ones(size(x(:))),x(:)]);
 
-    forwardregressor(i,1) = B(2);
-    forwardregressor(i,2) = B(1);
+    forwardregressor(i,:) = [B(2) B(1)];
 
     if DisplayForwardFits %Will display if DisplayForwardFits = 1. 
            
@@ -31,10 +29,9 @@ for i = 1:(rowsfullcombined-1)  %this iterates for every pair of elements in the
 
     x = reshape(combinedfullelements((i+1),:),[],1);
     Y = reshape(combinedfullelements((i),:),[],1);
-    [B,BINT,R,RINT,STATS] = regress(Y,[ones(size(x(:))),x(:)]); 
+    [B,~,~,~,STATS] = regress(Y,[ones(size(x(:))),x(:)]); 
 
-    backwardregressor(i,1) = B(2);
-    backwardregressor(i,2) = B(1);
+    backwardregressor(i,:) = [B(2) B(1)];
 
     if DisplayBackwardFits%Will display if DisplayBackwardFits = 1.
 
