@@ -1,22 +1,14 @@
 %% Plot our Final Results
 
-combinedfullelements(combinedfullelements==9999)=NaN;
-SparseElements(SparseElements==9999)=NaN;
-NealBasaltElements(NealBasaltElements==9999)=NaN;
-KREEPElements(KREEPElements==9999)=NaN;
-AlkaliAnorthiteElements(AlkaliAnorthiteElements==9999)=NaN;
-AlkaliNoriteElements(AlkaliNoriteElements==9999)=NaN;
-%Apollo15LowTiElements(Apollo15LowTiElements==9999)=NaN;
-
 if Normalise
     
     FinalNormaliseElements = NormaliseElements;
-    FianlAllNormaliseElements = AllNormaliseElements;
+    AllFinalNormaliseElements = AllNormaliseElements;
     
 else
     
     FinalNormaliseElements = ones(length(NormaliseElements),1);
-    FinalAllNormaliseElements = ones(length(AllNormaliseElements),1);
+    AllFinalNormaliseElements = ones(length(AllNormaliseElements),1);
     
 end
 
@@ -88,25 +80,6 @@ if DisplayLogLog
 
         xlabel(ElementNames(i))
         ylabel(ElementNames(i+1))
-
-        %{
-        %B(B<=0.001)=0; %Sets values to zero if they are negligible,
-
-        %lower = refline(BINT(2,1),BINT(1,1));
-        %lower.LineStyle = '--';
-        %upper = refline(BINT(2,2),BINT(1,2));
-        %upper.LineStyle = ':';
-
-
-        if -0.001 <= forwardregressor(1) && forwardregressor(1) <= 0.001  %Ignores the intercept if it is negligible, otherwise it will display it
-            fittedregression.DisplayName = strcat('y =',num2str(forwardregressor(2)),'x . R^2 = ', num2str(STATS(1)));  
-        elseif B(i,1) >=0.001     %This is for positive intercepts           
-            fittedregression.DisplayName = strcat('y =',num2str(forwardregressor(2)),'x +',num2str(forwardregressor(1)), '. R^2 = ', num2str(STATS(1)));
-        else                    %This is for negative intercepts
-            fittedregression.DisplayName = strcat('y =',num2str(forwardregressor(2)),'x',num2str(forwardregressor(1)), '. R^2 = ', num2str(STATS(1)));
-        end
-
-        %}
 
         set(gcf,'position',[300,300,1300,600])
         
