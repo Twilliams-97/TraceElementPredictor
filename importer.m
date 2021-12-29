@@ -4,7 +4,7 @@
 
 ExcelFile = '/Users/tomwilliams/Desktop/Brown/Fall 2021/Trace Element/Term Paper/AllSamples.xlsx';
 
-%% Get Element Nams
+%% Get Element Names
 
 ElementNames = readtable(ExcelFile, 'Sheet', 'Names', 'VariableNamingRule', 'preserve');
 ElementNames = ElementNames{:,1};
@@ -94,9 +94,8 @@ if ImportTestSparse % Import Sparse Data from Excel (elements missing, legacy)
 end
 
 function elementread = elementreader(ExcelFile,SheetName)
-   
+
     elementread = readtable(ExcelFile,'Sheet', SheetName, 'VariableNamingRule', 'preserve');           
     elementread = elementread{:, 2:end};      
-    elementread(isnan(elementread)) = 9999;
-            
+           
 end
