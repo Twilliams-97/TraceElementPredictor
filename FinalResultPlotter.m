@@ -35,6 +35,7 @@ if DisplayLogLog
         if i == 1 || i==9
             figure()
             set(gcf,'position',[300,300,1300,600])
+            legend('Location','NorthWest')
         end
 
         if i <= 8
@@ -63,17 +64,14 @@ if DisplayLogLog
 
         end
 
-        if i == 1 || i==9
-
-            legend('Autoupdate','off','Location','NorthWest')
-
-        end
-
-
         if DisplayAlkaliNoriteonLogLog
 
-            loglog(AlkaliNoriteElements(i,:),AlkaliNoriteElements((i+1),:),'rp','DisplayName','Alkali Norite Elements','MarkerfaceColor','r')
+            loglog(AlkaliNoriteElements(i,:),AlkaliNoriteElements((i+1),:),'rp','DisplayName','Alkali Norite Elements','MarkerfaceColor','r', 'HandleVisibility','off')
 
+        end
+        
+        if i == 1 || i==9
+            legend('Location','NorthWest')
         end
 
         hold off
@@ -119,18 +117,17 @@ function plotter(sparseelementiterator,SparseElements,combinedfullelements,Final
         'MarkerFaceColor','m',...
         'DisplayName','Full Suite of Elements Analysed');
 
-    legend('Autoupdate','off')
-
     semilogy(sparseelementiterator./FinalNormaliseElements,'--^k',...
         'MarkerFaceColor','k',...
         'MarkerEdgeColor','k',...
-        'MarkerSize',5);
+        'MarkerSize',5, 'HandleVisibility','off');
 
     semilogy(SparseElements./FinalNormaliseElements,'-ok',...
-        'MarkerFaceColor','k');
+        'MarkerFaceColor','k', 'HandleVisibility','off');
 
     semilogy(combinedfullelements./FinalNormaliseElements,'-+m',...
-        'MarkerFaceColor','m',...
-        'DisplayName','Modern Measurements (used to predict)');
+        'MarkerFaceColor','m', 'HandleVisibility','off');
+    
+    legend()
     
 end
