@@ -1,7 +1,7 @@
 %% Find the missing elements in the sparse matrix (the one with not all elements measured)    
     
 sparseelementiterator = SparseElements; %Create an array that will be filled with predicted values
-sparseelementiterator(sparseelementiterator==9999)=0;
+sparseelementiterator(isnan(sparseelementiterator)) = 0;
 
 for repeat = 1:(NearestNeighbours)
      
