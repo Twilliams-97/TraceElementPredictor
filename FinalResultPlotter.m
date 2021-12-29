@@ -1,5 +1,4 @@
 %% Plot our Final Results
-
 if Normalise
     
     FinalNormaliseElements = NormaliseElements;
@@ -15,7 +14,7 @@ end
 
 if DisplayFinalResults
 
-    plotter(sparseelementiterator,SparseElements,combinedfullelements,FinalNormaliseElements,IncludeLowTiBasalt,IsBasalt)
+    plotter(sparseelementiterator,SparseElements,combinedfullelements,FinalNormaliseElements)
 
     xticks([1:(length(SparseElements(:,1)))])
     xticklabels(ElementNames)
@@ -35,6 +34,7 @@ if DisplayLogLog
 
         if i == 1 || i==9
             figure()
+            set(gcf,'position',[300,300,1300,600])
         end
 
         if i <= 8
@@ -76,15 +76,11 @@ if DisplayLogLog
 
         end
 
-        %fittedforwardregression = refline(forwardregressor(i,1),forwardregressor(i,2));
-
+        hold off
+        
         xlabel(ElementNames(i))
         ylabel(ElementNames(i+1))
-
-        set(gcf,'position',[300,300,1300,600])
-        
-        hold off
-
+  
     end
 
 end
@@ -99,24 +95,16 @@ if plotcombined
     semilogy(LaPazMareBasaltMeteoriteElements./AllFinalNormaliseElements,'-g')
     semilogy(AlkaliAnorthiteElements./AllFinalNormaliseElements,'-m')
     semilogy(AlkaliNoriteElements./AllFinalNormaliseElements,'-r')
-
+    hold off
     xticks([1:(length(combinedfullelements(:,1)))])
     xticklabels(AllElementNames)
 
 end 
 
-function array = lowTiremover(array)
-
-    array(:,58:62) = [];   % Luna and Apollo
-    array(:,52) = []; %Remove sample 52
-   
-end
-
-function plotter(sparseelementiterator,SparseElements,combinedfullelements,FinalNormaliseElements,IncludeLowTiBasalt,IsBasalt)
+function plotter(sparseelementiterator,SparseElements,combinedfullelements,FinalNormaliseElements)
 
     figure()
-    h1 = axes;
-
+    
     semilogy(sparseelementiterator(:,1)./FinalNormaliseElements,'--^k',...
         'MarkerFaceColor','k',...
         'MarkerEdgeColor','k',...
@@ -130,16 +118,6 @@ function plotter(sparseelementiterator,SparseElements,combinedfullelements,Final
     semilogy(combinedfullelements(:,1)./FinalNormaliseElements,'-+m',...
         'MarkerFaceColor','m',...
         'DisplayName','Full Suite of Elements Analysed');
-    
-    if IncludeLowTiBasalt
-        if IsBasalt
-        
-            semilogy(sparseelementiterator(:,61)./FinalNormaliseElements,'-r',... 
-                'MarkerFaceColor','r',...
-                'MarkerSize',5,...
-                'DisplayName','Low Ti Basalt');
-        end
-    end
 
     legend('Autoupdate','off')
 
