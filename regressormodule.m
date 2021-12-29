@@ -11,7 +11,7 @@ for i = 1:(rowsfullcombined-1)  %this iterates for every pair of elements in the
     Y = reshape(combinedfullelements((i+1),:),[],1);  
     [B,~,~,~,STATS] = regress(Y,[ones(size(x(:))),x(:)]);
 
-    forwardregressor(i,:) = [B(2) B(1)];
+    forwardregressor(i,:) = B;
 
     if DisplayForwardFits %Will display if DisplayForwardFits = 1. 
            
@@ -31,7 +31,7 @@ for i = 1:(rowsfullcombined-1)  %this iterates for every pair of elements in the
     Y = reshape(combinedfullelements((i),:),[],1);
     [B,~,~,~,STATS] = regress(Y,[ones(size(x(:))),x(:)]); 
 
-    backwardregressor(i,:) = [B(2) B(1)];
+    backwardregressor(i,:) = B;
 
     if DisplayBackwardFits%Will display if DisplayBackwardFits = 1.
 
@@ -62,12 +62,12 @@ function loglogplotter(i,combinedfullelements,B,STATS,ElementNames,ydir) %1 for 
         loglog(combinedfullelements(i+xdir,:),combinedfullelements((i+ydir),:),'.','DisplayName','Measured Elements')
 
         hold on
-        fittedregression = refline(B(2),B(1)); 
+        fittedregression = refline(B(1),B(2)); 
         hold off
               
         xlabel(ElementNames(i+xdir))
         ylabel(ElementNames(i+ydir))
-        fittedregression.DisplayName = strcat('y =',num2str(B(2)),'x +',num2str(B(1)), '. R^2 = ', num2str(STATS(1)));
+        fittedregression.DisplayName = strcat('y =',num2str(B(1)),'x +',num2str(B(2)), '. R^2 = ', num2str(STATS(1)));
         legend('Location','NorthWest','color','none')
                   
 end
