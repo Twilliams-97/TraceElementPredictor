@@ -1,5 +1,4 @@
 %% Element Predictor
-
 clear;
 close all;
 
@@ -86,8 +85,6 @@ end
 
 %There are multiple options for what to include
 
-IsBasalt = 0;
-IncludeLowTiBasalt = 0;     %If using Basalt, do you want to plot LowTiBasalt?
 DisplayKREEPonLogLog = 1;
 DisplayAlkaliAnorthiteonLogLog = 1;
 DisplayAlkaliNoriteonLogLog = 1;
