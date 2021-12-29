@@ -46,10 +46,11 @@ end
 
 %% Functions
 
-function loglogplotter(i,combinedfullelements,B,STATS,ElementNames,direction) %1 for forwards, 0 for backwards
+function loglogplotter(i,combinedfullelements,B,STATS,ElementNames,ydir) %1 for forwards, 0 for backwards
 
         if i == 1 || i==9
             figure()
+            set(gcf,'position',[300,300,1300,600])
         end
 
         if i <= 8
@@ -58,8 +59,8 @@ function loglogplotter(i,combinedfullelements,B,STATS,ElementNames,direction) %1
             subplot(2,4,(i-8))
         end
         
-        ydir = direction;           %These are used to get the appropriate plots and labels
-        xdir = not(direction);      %The +1 and +0 need to be opposite for forward and backward
+        xdir = not(ydir);    %These are used to get the appropriate plots and labels
+                                  %The +1 and +0 need to be opposite for forward and backward
         
         loglog(combinedfullelements(i+xdir,:),combinedfullelements((i+ydir),:),'.','DisplayName','Measured Elements')
 
@@ -71,6 +72,5 @@ function loglogplotter(i,combinedfullelements,B,STATS,ElementNames,direction) %1
         ylabel(ElementNames(i+ydir))
         fittedregression.DisplayName = strcat('y =',num2str(B(2)),'x +',num2str(B(1)), '. R^2 = ', num2str(STATS(1)));
         legend('Location','NorthWest','color','none')
-        set(gcf,'position',[300,300,1300,600])
-             
+                  
 end
