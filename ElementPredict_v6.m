@@ -40,9 +40,11 @@ SparseElements = MareBasaltElements; %[MareBasaltElements VolcanicGlassElements]
 
 %% Select Elements to Include
 
+% '1' indicates that this element will be used, '0' if element is to be discarded.
+
 IncludedElements = [1 ;1 ;1 ;0 ;1 ;1 ;1 ;1 ;1 ;1 ;1 ;1 ;1 ;1 ;1 ;1 ;1 ;1];
                   %[La;Ce;Pr;Sr;Nd;Zr;Hf;Sm;Eu;Gd;Tb;Dy;Y ;Ho;Er;Tm;Yb;Lu]
-
+                  
 ElementChooser
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -58,18 +60,17 @@ regressormodule
 
 %% Find the missing elements in the sparse matrix (the one with not all elements measured)    
 
-NearestNeighbours = 3;   %Find the number of gaps to fill. 1 will fill from nearest neighbours, 2 from next etc.
+NearestNeighbours = 3;   %Find the number of gaps to fill. 1 will fill from nearest neighbours, 2 from next nearest, etc.
 
-%Choosing which element pairs not to include for forward and backward
-%prediction must be done within this module 
+%Choosing which element pairs not to include for forward and backward prediction must be done within this module 
 
-MissingElementModule  
+MissingElementModule
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% Calculate The Europium Anomaly for every sparse sample
 
-AddEuAnomalytoArray = 1;
+AddEuAnomalytoArray = 0;
 
 if AddEuAnomalytoArray
 
@@ -93,8 +94,8 @@ DisplayAlkaliNoriteonLogLog = 1;
 
 Normalise = 1;
 DisplayLogLog = 0;
-DisplayFinalResults = 0;
-plotcombined = 1;
+DisplayFinalResults = 1;
+plotcombined = 0;
 
 FinalResultPlotter
 %FinalPredictorPlotter
