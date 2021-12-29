@@ -15,7 +15,7 @@ for repeat = 1:(NearestNeighbours)
 
         if missingrow(index) ~=1 && sparseelementiterator(missingrow(index)-1,missingcolumn(index)) ~= 0 
 
-            forwardelements(missingrow(index),missingcolumn(index)) = sparseelementiterator(missingrow(index)-1,missingcolumn(index))*forwardregressor(missingrow(index)-1,2) + forwardregressor(missingrow(index)-1,1);
+            forwardelements(missingrow(index),missingcolumn(index)) = sparseelementiterator(missingrow(index)-1,missingcolumn(index))*forwardregressor(missingrow(index)-1,2) + forwardregressor(missingrow(index)-1);
 
         end
 
@@ -30,7 +30,7 @@ for repeat = 1:(NearestNeighbours)
 
             if missingrow(index) ~=lastrownumber && sparseelementiterator(missingrow(index)+1,missingcolumn(index)) ~= 0    
 
-                backwardelements(missingrow(index),missingcolumn(index)) = sparseelementiterator(missingrow(index)+1,missingcolumn(index))*backwardregressor(missingrow(index),2) + backwardregressor(missingrow(index),1);
+                backwardelements(missingrow(index),missingcolumn(index)) = sparseelementiterator(missingrow(index)+1,missingcolumn(index))*backwardregressor(missingrow(index),2) + backwardregressor(missingrow(index));
 
             end
         end
